@@ -3,6 +3,7 @@ A code solving the 1D heat equation with Dirichlet boundary conditions by implic
 
 ## Minimal requirements
 - A C++ compiler supporting the `C++17` standard
+- `cmake`
 - The HDF5 library
 - `python3` with `numpy`, `matplotlib`, and `h5py` to generate evolution snapshots
 - `ffmpeg` to generate movies
