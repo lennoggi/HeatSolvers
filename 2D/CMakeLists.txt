@@ -1,11 +1,12 @@
 cmake_minimum_required(VERSION 3.10)
 
-project(Heat1D VERSION 1.0.0.0 LANGUAGES CXX)
+set(PROJ "Heat2D")
+set(EXE  ${PROJ})
+
+project(${PROJ} VERSION 1.0.0.0 LANGUAGES C CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-
-set(EXE "Heat2D_exe")
 
 add_executable(${EXE}
     Initial_data.cc
