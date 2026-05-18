@@ -16,6 +16,8 @@
 #include <vtkRenderWindowInteractor.h>
 #include <vtkInteractorStyleTrackballCamera.h>
 #include <vtkCommand.h>
+#include <vtkTextActor.h>
+#include <vtkTextProperty.h>
 
 #include "include/Declare_functions.hh"
 #include "include/SwitchIterationCallback.hh"
@@ -76,8 +78,15 @@ int main() {
     vtkNew<vtkActor> surface_actor;
     surface_actor->SetMapper(mapper);
 
+    vtkNew<vtkTextActor> text_actor;
+    text_actor->SetInput("Iteration 0\nLeft/Right: switch iteration\n<Q>/<E>: quit\nLeft mouse button + drag: scroll\nRight mouse button + drag or mouse wheel rolling: zoom in/out");
+    text_actor->GetTextProperty()->SetFontSize(18);
+    text_actor->GetTextProperty()->SetColor(1.0, 1.0, 1.0);  // White
+    text_actor->SetPosition(10, 10);  // Pixels from bottom-left
+
     vtkNew<vtkRenderer> renderer;
     renderer->AddActor(surface_actor);
+    renderer->AddActor2D(text_actor);
 
     vtkNew<vtkRenderWindow> window;
     window->AddRenderer(renderer);
@@ -113,6 +122,7 @@ int main() {
     switch_iter_cb->niters       = static_cast<size_t>(niters);
     switch_iter_cb->nx           = nx;
     switch_iter_cb->ny           = ny;
+    switch_iter_cb->text_actor   = text_actor.Get();
     switch_iter_cb->grid         = grid.Get();
     switch_iter_cb->warp         = warp.Get();
     switch_iter_cb->window       = window.Get();

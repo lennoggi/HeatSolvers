@@ -5,6 +5,7 @@
 
 #include <vtkObject.h>
 #include <vtkCommand.h>
+#include <vtkTextActor.h>
 #include <vtkRectilinearGrid.h>
 #include <vtkWarpScalar.h>
 #include <vtkRenderWindow.h>
@@ -17,9 +18,10 @@ class SwitchIterationCallback : public vtkCommand {
         size_t              niters       = 0;
         size_t              nx           = 0;
         size_t              ny           = 0;
-        vtkRectilinearGrid* grid         = nullptr;
-        vtkWarpScalar*      warp         = nullptr;
-        vtkRenderWindow*    window       = nullptr;
+        vtkTextActor       *text_actor   = nullptr;
+        vtkRectilinearGrid *grid         = nullptr;
+        vtkWarpScalar      *warp         = nullptr;
+        vtkRenderWindow    *window       = nullptr;
 
         static SwitchIterationCallback* New() {
             return new SwitchIterationCallback;

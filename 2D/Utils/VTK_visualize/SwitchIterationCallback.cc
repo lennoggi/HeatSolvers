@@ -2,6 +2,7 @@
  * SwitchIterationCallback class implementation
  * ******************************************** */
 #include <string>
+#include <sstream>
 
 #include <vtkObject.h>
 #include <vtkRenderWindowInteractor.h>
@@ -37,7 +38,16 @@ void SwitchIterationCallback::Execute(vtkObject *caller, unsigned long, void*) {
         return;
     }
 
+    ostringstream text_ss;
+    text_ss << "Iteration " << current_iter       << endl
+            << "Left/Right: switch iteration"     << endl
+            << "<Q>/<E>: quit"                    << endl
+            << "Left mouse button + drag: scroll" << endl
+            << "Right mouse button + drag or mouse wheel rolling: zoom in/out";
+    this->text_actor->SetInput(text_ss.str().c_str());
+
     load_iteration(current_iter, this->nx, this->ny, this->file_id,
                    this->grid, this->warp, this->window);
+
     return;
 }
