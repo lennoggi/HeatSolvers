@@ -5,7 +5,7 @@ cmake_minimum_required(VERSION 3.16)
 # ----------
 set(PROJ "Heat2D_viz")
 set(EXE  ${PROJ})
-set(SRC Main.cc Read_dset.cc)
+set(SRC Load_iteration.cc Main.cc Read_dset.cc SwitchIterationCallback.cc)
 
 
 project(${PROJ} LANGUAGES C CXX)
