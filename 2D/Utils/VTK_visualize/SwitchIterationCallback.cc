@@ -39,11 +39,13 @@ void SwitchIterationCallback::Execute(vtkObject *caller, unsigned long, void*) {
     }
 
     ostringstream text_ss;
-    text_ss << "Iteration " << current_iter       << endl
-            << "Left/Right: switch iteration"     << endl
-            << "<Q>/<E>: quit"                    << endl
-            << "Left mouse button + drag: scroll" << endl
-            << "Right mouse button + drag or mouse wheel rolling: zoom in/out";
+    text_ss << "Iteration " << current_iter << endl
+            << "Left/Right: switch iteration" << endl
+            << "<Q>/<E>: quit" << endl
+            << "Left mouse button: rotate the camera around its focal point" << endl
+            << "Shift + left mouse button: pan the camera" << endl
+            << "Ctrl + left mouse button: roll the camera around its view axis" << endl
+            << "Ctrl + shift + left mouse button / Right mouse button / Mouse wheel rolling: zoom in/out";
     this->text_actor->SetInput(text_ss.str().c_str());
 
     load_iteration(current_iter, this->nx, this->ny, this->file_id,

@@ -1,6 +1,10 @@
+// NOTE: included here to have SCALE correctly imported
+#include "Parameters.hh"
+
 #include <cassert>
 #include <vector>
 #include <string>
+#include <sstream>
 #include <iostream>
 
 #include <hdf5.h>
@@ -8,20 +12,34 @@
 #include <vtkDoubleArray.h>
 #include <vtkRectilinearGrid.h>
 #include <vtkPointData.h>
+#include <vtkPointSet.h>
 #include <vtkWarpScalar.h>
 #include <vtkDataSetMapper.h>
+
 #include <vtkActor.h>
+#include <vtkTextActor.h>
+#include <vtkTextProperty.h>
+
+#if SCALE == LIN
+#include <vtkLookupTable.h>
+#elif SCALE == LOG
+#include <vtkLogLookupTable.h>
+#else
+#error "Invalid color scale"
+#endif
+
+#include <vtkScalarBarActor.h>
+
 #include <vtkRenderer.h>
 #include <vtkRenderWindow.h>
 #include <vtkRenderWindowInteractor.h>
 #include <vtkInteractorStyleTrackballCamera.h>
+
 #include <vtkCommand.h>
-#include <vtkTextActor.h>
-#include <vtkTextProperty.h>
 
 #include "include/Declare_functions.hh"
 #include "include/SwitchIterationCallback.hh"
-#include "Parameters.hh"
+#include "include/Check_parameters.hh"
 
 
 using namespace std;
@@ -78,15 +96,53 @@ int main() {
     vtkNew<vtkActor> surface_actor;
     surface_actor->SetMapper(mapper);
 
+
+    // Add informative text
+    ostringstream text_ss;
+    text_ss << "Iteration 0" << endl
+            << "Left/Right: switch iteration" << endl
+            << "<Q>/<E>: quit" << endl
+            << "Left mouse button: rotate the camera around its focal point" << endl
+            << "Shift + left mouse button: pan the camera" << endl
+            << "Ctrl + left mouse button: roll the camera around its view axis" << endl
+            << "Ctrl + shift + left mouse button / Right mouse button / Mouse wheel rolling: zoom in/out";
+
     vtkNew<vtkTextActor> text_actor;
-    text_actor->SetInput("Iteration 0\nLeft/Right: switch iteration\n<Q>/<E>: quit\nLeft mouse button + drag: scroll\nRight mouse button + drag or mouse wheel rolling: zoom in/out");
+    text_actor->SetInput(text_ss.str().c_str());
     text_actor->GetTextProperty()->SetFontSize(18);
     text_actor->GetTextProperty()->SetColor(1.0, 1.0, 1.0);  // White
     text_actor->SetPosition(10, 10);  // Pixels from bottom-left
 
+
+    // Add a color bar
+    #if SCALE == LIN
+    vtkNew<vtkLookupTable> lookup_table;
+    #elif SCALE == LOG
+    vtkNew<vtkLogLookupTable> lookup_table;
+    #else
+    #error "Invalid color scale"
+    #endif
+
+    lookup_table->SetTableRange(CBAR_MIN, CBAR_MAX);
+    lookup_table->Build();
+
+    vtkNew<vtkScalarBarActor> colorbar_actor;
+    colorbar_actor->SetNumberOfLabels(7);  // XXX XXX XXX XXX XXX XXX
+    colorbar_actor->SetLabelFormat("%.3e");
+    colorbar_actor->SetLookupTable(lookup_table);
+
+    // Make sure the data also use the same color bar
+    mapper->SetLookupTable(lookup_table);
+    mapper->SetScalarRange(CBAR_MIN, CBAR_MAX);
+    mapper->SetColorModeToMapScalars();
+    mapper->ScalarVisibilityOn();
+
+
+    // Add actors to the renderer and set up the rendering window
     vtkNew<vtkRenderer> renderer;
     renderer->AddActor(surface_actor);
     renderer->AddActor2D(text_actor);
+    renderer->AddActor2D(colorbar_actor);
 
     vtkNew<vtkRenderWindow> window;
     window->AddRenderer(renderer);
@@ -129,6 +185,8 @@ int main() {
 
     istyle->AddObserver(vtkCommand::KeyPressEvent, switch_iter_cb);
 
+
+    // Start
     interactor->Initialize();
     interactor->Start();
 
