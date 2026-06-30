@@ -1,5 +1,5 @@
 # HeatSolvers
-C++ codes to solve the heat equation in one and two spatial dimensions on uniform Cartesian grids
+C++ codes solving the heat equation in one and two spatial dimensions with Dirichlet boundary conditions on uniform Cartesian grids via implicit time integration (backward Euler)
 
 
 ## Description
