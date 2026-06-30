@@ -1,5 +1,5 @@
-# Heat1D
-A suite of codes solving the heat equation
+# HeatSolvers
+Codes to solve the heat equation in one or two dimensions
 
 $$
 \begin{equation*}
