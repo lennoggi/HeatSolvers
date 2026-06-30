@@ -1,22 +1,19 @@
 # HeatSolvers
-Codes to solve the heat equation in one or two dimensions
+C++ codes to solve the heat equation in one and two spatial dimensions on uniform Cartesian grids
 
-$$
-\begin{equation*}
-    \frac{\partial u}{\partial t}\left(t, x\right) = \alpha\nabla^2 u\left(t, x\right)\;,
-\end{equation*}
-$$
 
-where $\alpha > 0$, in one or two dimensions with Dirichlet boundary conditions
+## Description
+The heat equation in one spatial dimension with Dirichlet boundary conditions is
 
 $$
 \begin{align*}
-    u\left(t, 0\right) &= u_0\\
+    \frac{\partial u}{\partial t}\left(t, x\right) &= \alpha\nabla^2 u\left(t, x\right) \\
+    u\left(t, 0\right) &= u_0 \\
     u\left(t, L\right) &= u_L
 \end{align*}
 $$
 
-by implicit time integration (backward Euler).
+where $\alpha > 0$. The codes in this repository solve this equation and its trivial 2D extension by implicit time integration (backward Euler) on a uniform Cartesian grid.
 
 
 ## Minimal requirements
@@ -39,3 +36,4 @@ by implicit time integration (backward Euler).
    ./install/bin/<executable>
    ```
 4. To plot evolution snapshots and make movies, see `Utils/README.md` within each subdirectory
+5. Check out `2D/Utils/VTK_visualize` for a simple interactive visualization tool based on VTK for the 2D case
